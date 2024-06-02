@@ -15,8 +15,11 @@ module.exports = {
           DEFAULT: '#E74C3C',
         },
         falcongray: {
-          100: '#1f1f1f',
-          DEFAULT: '#242424',
+          100: '#1C2021',
+          90: '#1A1D1E',
+          80: '#32393A',
+          60: '#535D5F',
+          DEFAULT: '#1C2021',
         },
       },
       boxShadow: {

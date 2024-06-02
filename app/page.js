@@ -1,5 +1,6 @@
 'use client'
 
+import Header from '@/components/header'
 import tailwindConfig from '@/tailwind.config.js'
 import {
   Avatar,
@@ -10,13 +11,18 @@ import {
   SimpleGrid,
   Tooltip,
 } from '@mantine/core'
+import { IconBug, IconTool, IconUsers } from '@tabler/icons-react'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import NextImage from 'next/image'
 import { useEffect, useState } from 'react'
 import 'swiper/css'
 import resolveConfig from 'tailwindcss/resolveConfig'
 const tailwindColors = resolveConfig(tailwindConfig).theme.colors
 
-const carouselSlides = [
+dayjs.extend(relativeTime)
+
+const features = [
   {
     text: 'View real-time data plotted on graphs',
     image: '/graphs.png',
@@ -35,12 +41,18 @@ const carouselSlides = [
   },
 ]
 
+const iconProps = {
+  size: 18,
+  className: 'inline align-[-2px]',
+}
+
 export default function Home() {
   const [contributors, setContributors] = useState([])
+  const [repoStats, setRepoStats] = useState(null)
 
   useEffect(() => {
     async function getContributors() {
-      const res = await fetch('/github', {
+      const res = await fetch('/api/contributors', {
         cache: 'force-cache',
         next: { revalidate: 3600 },
       })
@@ -52,12 +64,29 @@ export default function Home() {
 
       const data = await res.json()
 
-      console.log(data)
-
       setContributors(data.contributors)
     }
 
+    async function getRepoStats() {
+      const res = await fetch('/api/repo', {
+        cache: 'force-cache',
+        next: { revalidate: 1200 },
+      })
+
+      if (!res.ok) {
+        console.error('Failed to get repo stats')
+        return
+      }
+
+      const data = await res.json()
+
+      console.log(data)
+
+      setRepoStats(data.repoStats)
+    }
+
     getContributors()
+    getRepoStats()
   }, [])
   return (
     <>
@@ -115,44 +144,62 @@ export default function Home() {
           </div>
         </div>
 
-        <SimpleGrid
-          cols={{ base: 1, sm: 2 }}
-          spacing={{ base: 'md', sm: 'xl' }}
-          verticalSpacing={{ base: 'md', sm: 'xl' }}
-          className='w-full lg:w-10/12'
-        >
-          {carouselSlides.map((slide, index) => (
-            <Card
-              className='border border-gray-700 hover:border-gray-600 duration-500 transition-colors'
-              bg={tailwindColors.falcongray[100]}
-              key={index}
-              shadow='md'
-              padding='none'
-              radius='md'
+        <div className='w-full'>
+          <Header text='Features' icon={<IconTool {...iconProps} />} />
+          <SimpleGrid
+            cols={{ base: 1, sm: 2 }}
+            spacing={{ base: 'md', sm: 'xl' }}
+            verticalSpacing={{ base: 'md', sm: 'xl' }}
+            className='w-full lg:w-10/12 mx-auto'
+          >
+            {features.map((feature, index) => (
+              <Card
+                className='border border-gray-700 hover:border-gray-600 duration-500 transition-colors'
+                bg={tailwindColors.falcongray[100]}
+                key={index}
+                shadow='md'
+                padding='none'
+                radius='md'
+              >
+                <Card.Section>
+                  <Image
+                    src={feature.image}
+                    alt={feature.text}
+                    className='px-4 pt-4 bg-falcongray'
+                  />
+                </Card.Section>
+                <p className='text-center m-4 text-md md:text-lg '>
+                  {feature.text}
+                </p>
+              </Card>
+            ))}
+          </SimpleGrid>
+
+          <p className='text-center mt-6 text-gray-400'>
+            Note: Currently only{' '}
+            <a
+              href='https://ardupilot.org/'
+              target='_blank'
+              className='text-falconred-60 hover:underline'
             >
-              <Card.Section>
-                <Image
-                  src={slide.image}
-                  alt={slide.text}
-                  className='p-4 bg-falcongray'
-                />
-              </Card.Section>
-              <p className='text-center m-4 text-md md:text-lg '>
-                {slide.text}
-              </p>
-            </Card>
-          ))}
-        </SimpleGrid>
+              ArduPilot
+            </a>{' '}
+            COPTER and PLANE devices are supported.
+          </p>
+        </div>
 
         {contributors.length > 0 && (
-          <div className='w-full'>
-            <h2 className='text-lg sm:text-xl font-bold text-center mb-4'>
-              Contributors
-            </h2>
+          <div className='w-full text-center'>
+            <Header text='Contributors' icon={<IconUsers {...iconProps} />} />
 
             <div className='w-full flex flex-row flex-wrap justify-center gap-2'>
               {contributors.map((contributor, index) => (
-                <Tooltip label={contributor.name} key={index}>
+                <Tooltip
+                  key={index}
+                  label={contributor.name}
+                  color={tailwindColors.falcongray[80]}
+                  transitionProps={{ transition: 'fade-up', duration: 100 }}
+                >
                   <Avatar
                     src={contributor.avatar}
                     alt={contributor.name}
@@ -167,7 +214,39 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        <div className='w-full text-center'>
+          <Header
+            text='Found a bug or would like an extra feature?'
+            icon={<IconBug {...iconProps} />}
+          />
+
+          <p className='w-full md:w-1/2 lg:w-1/3 mx-auto'>
+            If you found a bug, have an idea for an improvement or want to ask
+            us a question then please submit an issue on GitHub{' '}
+            <a
+              href='https://github.com/Project-Falcon/FGCS/issues/new/choose'
+              target='_blank'
+              className='text-falconred-80 hover:underline'
+            >
+              here
+            </a>
+            .
+          </p>
+        </div>
       </main>
+      <footer className='w-full text-center py-4 bg-falcongray-90'>
+        {repoStats !== null && (
+          <a
+            href={repoStats?.url}
+            target='_blank'
+            className='text-sm hover:underline'
+          >
+            Version {repoStats?.version} published{' '}
+            {dayjs(repoStats?.publishedAt).fromNow()}
+          </a>
+        )}
+      </footer>
     </>
   )
 }
