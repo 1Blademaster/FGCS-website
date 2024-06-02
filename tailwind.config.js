@@ -19,6 +19,10 @@ module.exports = {
           60: '#F08C82',
           DEFAULT: '#E74C3C',
         },
+        falcongray: {
+          100: "#1f1f1f",
+          DEFAULT: "#242424"
+        }
       },
       boxShadow: {
         'hero-image': '0px 0px 25px 4px #E74C3C',

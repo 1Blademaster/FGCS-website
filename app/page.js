@@ -89,9 +89,9 @@ export default function Home() {
           className='w-10/12'
         >
           {carouselSlides.map((slide, index) => (
-            <Card key={index} shadow='sm' padding='none' radius='md'>
+            <Card className="border border-gray-700" bg={tailwindColors.falcongray[100]} key={index} shadow='md' padding='none' radius='md'>
               <Card.Section>
-                <Image src={slide.image} alt={slide.text} />
+                <Image src={slide.image} alt={slide.text} className='p-4 bg-falcongray' />
               </Card.Section>
               <p className='text-center m-4 text-lg'>{slide.text}</p>
             </Card>
