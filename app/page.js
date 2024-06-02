@@ -80,8 +80,6 @@ export default function Home() {
 
       const data = await res.json()
 
-      console.log(data)
-
       setRepoStats(data.repoStats)
     }
 
