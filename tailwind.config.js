@@ -22,6 +22,7 @@ module.exports = {
       boxShadow: {
         'hero-image': '0px 0px 25px 4px #E74C3C',
         'hero-image-hover': '0px 0px 30px 8px #E74C3C',
+        'contributor-avatar-image-hover': '0px 0px 15px 2px #E74C3C',
       },
     },
   },

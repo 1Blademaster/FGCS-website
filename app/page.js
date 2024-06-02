@@ -144,23 +144,29 @@ export default function Home() {
           ))}
         </SimpleGrid>
 
-        <div className='w-full'>
-          {contributors.length > 0 ? (
-            <div className='w-full flex flex-row flex-wrap justify-center gap-4'>
+        {contributors.length > 0 && (
+          <div className='w-full'>
+            <h2 className='text-lg sm:text-xl font-bold text-center mb-4'>
+              Contributors
+            </h2>
+
+            <div className='w-full flex flex-row flex-wrap justify-center gap-2'>
               {contributors.map((contributor, index) => (
                 <Tooltip label={contributor.name} key={index}>
                   <Avatar
                     src={contributor.avatar}
                     alt={contributor.name}
                     radius='sm'
+                    component='a'
+                    href={contributor.url}
+                    target='_blank'
+                    className='shadow-md hover:shadow-contributor-avatar-image-hover transition-shadow duration-500'
                   />
                 </Tooltip>
               ))}
             </div>
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
+          </div>
+        )}
       </main>
     </>
   )
