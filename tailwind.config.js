@@ -7,11 +7,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
       colors: {
         falconred: {
           100: '#E74C3C',
@@ -20,9 +15,9 @@ module.exports = {
           DEFAULT: '#E74C3C',
         },
         falcongray: {
-          100: "#1f1f1f",
-          DEFAULT: "#242424"
-        }
+          100: '#1f1f1f',
+          DEFAULT: '#242424',
+        },
       },
       boxShadow: {
         'hero-image': '0px 0px 25px 4px #E74C3C',

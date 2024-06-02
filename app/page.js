@@ -1,11 +1,19 @@
 'use client'
 
 import tailwindConfig from '@/tailwind.config.js'
-import { Button, Card, Group, Image, SimpleGrid } from '@mantine/core'
+import {
+  Avatar,
+  Button,
+  Card,
+  Group,
+  Image,
+  SimpleGrid,
+  Tooltip,
+} from '@mantine/core'
 import NextImage from 'next/image'
+import { useEffect, useState } from 'react'
 import 'swiper/css'
 import resolveConfig from 'tailwindcss/resolveConfig'
-
 const tailwindColors = resolveConfig(tailwindConfig).theme.colors
 
 const carouselSlides = [
@@ -28,9 +36,32 @@ const carouselSlides = [
 ]
 
 export default function Home() {
+  const [contributors, setContributors] = useState([])
+
+  useEffect(() => {
+    async function getContributors() {
+      const res = await fetch('/github', {
+        cache: 'force-cache',
+        next: { revalidate: 3600 },
+      })
+
+      if (!res.ok) {
+        console.error('Failed to get contributors')
+        return
+      }
+
+      const data = await res.json()
+
+      console.log(data)
+
+      setContributors(data.contributors)
+    }
+
+    getContributors()
+  }, [])
   return (
     <>
-      <div className='w-full flex items-center justify-center mt-4 gap-2'>
+      <div className='flex items-center justify-center my-4 gap-2'>
         <NextImage
           src='/logo_dark_nobg_white_icon.svg'
           alt='Project Falcon logo'
@@ -42,14 +73,15 @@ export default function Home() {
           FGCS <span className='text-sm font-normal align-super'>alpha</span>
         </h1>
       </div>
-      <main className='flex min-h-screen flex-col items-center justify-between px-24 pb-24 pt-12 gap-28'>
-        <div className='flex flex-row w-full items-center justify-center gap-10'>
-          <div className='flex flex-col w-1/3'>
-            <p className='font-bold text-4xl'>
+
+      <main className='flex min-h-screen flex-col items-center justify-between px-8 md:px-14 lg:px-24 pb-24 pt-6 gap-12 sm:gap-16 md:gap-20 lg:gap-28'>
+        <div className='flex flex-col md:flex-row w-full items-center justify-center gap-6 md:gap-10'>
+          <div className='flex flex-col w-full md:w-1/3'>
+            <p className='font-bold text-2xl sm:text-3xl md:text-4xl'>
               A <span className='text-falconred'>modern</span> ground control
               station for your ArduPilot aircraft
             </p>
-            <p className='my-2'>
+            <p className='text-md md:text-lg my-2'>
               Enjoy a refreshed look to your standard GCS software, with a focus
               on user experience and ease of use.
             </p>
@@ -73,7 +105,7 @@ export default function Home() {
               </Button>
             </Group>
           </div>
-          <div className='w-3/4'>
+          <div className='w-full md:w-7/12 lg:w-3/4'>
             <Image
               src='/dashboard.png'
               alt='A screenshot of the dashboard'
@@ -82,21 +114,53 @@ export default function Home() {
             />
           </div>
         </div>
+
         <SimpleGrid
-          cols={2}
-          spacing='xl'
-          verticalSpacing='xl'
-          className='w-10/12'
+          cols={{ base: 1, sm: 2 }}
+          spacing={{ base: 'md', sm: 'xl' }}
+          verticalSpacing={{ base: 'md', sm: 'xl' }}
+          className='w-full lg:w-10/12'
         >
           {carouselSlides.map((slide, index) => (
-            <Card className="border border-gray-700" bg={tailwindColors.falcongray[100]} key={index} shadow='md' padding='none' radius='md'>
+            <Card
+              className='border border-gray-700 hover:border-gray-600 duration-500 transition-colors'
+              bg={tailwindColors.falcongray[100]}
+              key={index}
+              shadow='md'
+              padding='none'
+              radius='md'
+            >
               <Card.Section>
-                <Image src={slide.image} alt={slide.text} className='p-4 bg-falcongray' />
+                <Image
+                  src={slide.image}
+                  alt={slide.text}
+                  className='p-4 bg-falcongray'
+                />
               </Card.Section>
-              <p className='text-center m-4 text-lg'>{slide.text}</p>
+              <p className='text-center m-4 text-md md:text-lg '>
+                {slide.text}
+              </p>
             </Card>
           ))}
         </SimpleGrid>
+
+        <div className='w-full'>
+          {contributors.length > 0 ? (
+            <div className='w-full flex flex-row flex-wrap justify-center gap-4'>
+              {contributors.map((contributor, index) => (
+                <Tooltip label={contributor.name} key={index}>
+                  <Avatar
+                    src={contributor.avatar}
+                    alt={contributor.name}
+                    radius='sm'
+                  />
+                </Tooltip>
+              ))}
+            </div>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
       </main>
     </>
   )
