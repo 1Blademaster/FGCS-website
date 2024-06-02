@@ -99,7 +99,7 @@ export default function Home() {
           width={40}
         />
         <h1 className='text-3xl font-bold'>
-          FGCS <span className='text-sm font-normal align-super'>alpha</span>
+          FGCS <span className='text-xs font-normal align-super'>alpha</span>
         </h1>
       </div>
 
@@ -180,7 +180,7 @@ export default function Home() {
             <a
               href='https://ardupilot.org/'
               target='_blank'
-              className='text-falconred-60 hover:underline'
+              className='text-falconred-80 hover:underline'
             >
               ArduPilot
             </a>{' '}
