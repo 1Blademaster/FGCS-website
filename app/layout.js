@@ -3,7 +3,7 @@ import './globals.css' // Needs to be at the top of the file
 import '@mantine/core/styles.css'
 
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
-
+import { Analytics } from '@vercel/analytics/react'
 export const metadata = {
   title: 'FGCS',
   description: 'A modern ground control station for your ArduPilot aircraft',
@@ -53,6 +53,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <MantineProvider defaultColorScheme='dark'>{children}</MantineProvider>
+        <Analytics />
       </body>
     </html>
   )
