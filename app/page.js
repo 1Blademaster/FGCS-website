@@ -68,10 +68,7 @@ export default function Home() {
     }
 
     async function getRepoStats() {
-      const res = await fetch('/api/repo', {
-        cache: 'force-cache',
-        next: { revalidate: 1200 },
-      })
+      const res = await fetch('/api/repo')
 
       if (!res.ok) {
         console.error('Failed to get repo stats')
