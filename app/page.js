@@ -113,7 +113,7 @@ export default function Home() {
               <Button
                 color={tailwindColors.falconred[100]}
                 component={'a'}
-                href='https://github.com/Project-Falcon/FGCS/releases/latest'
+                href='https://github.com/Avis-Drone-Labs/FGCS/releases/latest'
                 target='_blank'
               >
                 Download
@@ -122,7 +122,7 @@ export default function Home() {
                 color={tailwindColors.falconred[80]}
                 variant='outline'
                 component={'a'}
-                href='https://github.com/Project-Falcon/FGCS/'
+                href='https://github.com/Avis-Drone-Labs/FGCS/'
                 target='_blank'
               >
                 GitHub
@@ -131,7 +131,7 @@ export default function Home() {
           </div>
           <div className='w-full md:w-7/12 lg:w-3/4'>
             <Image
-              src='/dashboard.png'
+              src='/dashboard.webp'
               alt='A screenshot of the dashboard'
               radius='md'
               className='shadow-hero-image hover:shadow-hero-image-hover transition-shadow duration-500'
@@ -220,7 +220,7 @@ export default function Home() {
             If you found a bug, have an idea for an improvement or want to ask
             us a question then please submit an issue on GitHub{' '}
             <a
-              href='https://github.com/Project-Falcon/FGCS/issues/new/choose'
+              href='https://github.com/Avis-Drone-Labs/FGCS/issues/new/choose'
               target='_blank'
               className='text-falconred-80 hover:underline'
             >
