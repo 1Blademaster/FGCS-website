@@ -37,6 +37,9 @@ export async function GET() {
 
       await kv.set('repoStats', repoStats, { ex: 1200 })
       console.log('Saved new repo stats data to KV')
+    } else {
+      console.error('Failed to fetch repo stats')
+      console.error(fetchedStats)
     }
   } else {
     repoStats = cachedRepoStats

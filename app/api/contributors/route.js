@@ -39,6 +39,9 @@ export async function GET() {
 
       await kv.set('contributors', contributorsData, { ex: 3600 })
       console.log('Saved new contributor data to KV')
+    } else {
+      console.error('Failed to fetch repo contributors')
+      console.error(fetchedContributors)
     }
   } else {
     contributorsData = cachedContributors
