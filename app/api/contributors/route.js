@@ -18,7 +18,7 @@ export async function GET() {
     const fetchedContributors = await octokit.request(
       'GET /repos/{owner}/{repo}/contributors',
       {
-        owner: 'project-falcon',
+        owner: 'Avis-Drone-Labs',
         repo: 'FGCS',
         headers: {
           'X-GitHub-Api-Version': '2022-11-28',
