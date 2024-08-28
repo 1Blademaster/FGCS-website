@@ -3,6 +3,7 @@
 import Header from '@/components/header'
 import tailwindConfig from '@/tailwind.config.js'
 import {
+  Modal,
   Avatar,
   Button,
   Card,
@@ -25,7 +26,7 @@ dayjs.extend(relativeTime)
 const features = [
   {
     text: 'View real-time data plotted on graphs',
-    image: '/graphs.png',
+    image: '/graphs_2.png',
   },
   {
     text: 'Fetch and set all the parameters on your flight controller',
@@ -33,7 +34,7 @@ const features = [
   },
   {
     text: 'Configure and test different aspects of your setup',
-    image: '/config.png',
+    image: '/config_2.png',
   },
   {
     text: 'View and analyse Dataflash and FGCS telemetry logs',
@@ -49,6 +50,13 @@ const iconProps = {
 export default function Home() {
   const [contributors, setContributors] = useState([])
   const [repoStats, setRepoStats] = useState(null)
+  const [modalOpened, setModalOpened] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState(null);
+
+  const handleFeatureClick = (feature) => {
+    setSelectedFeature(feature);
+    setModalOpened(true);
+  };
 
   useEffect(() => {
     async function getContributors() {
@@ -131,7 +139,7 @@ export default function Home() {
           </div>
           <div className='w-full md:w-7/12 lg:w-3/4'>
             <Image
-              src='/dashboard.webp'
+              src='/dashboard_2.webp'
               alt='A screenshot of the dashboard'
               radius='md'
               className='shadow-hero-image hover:shadow-hero-image-hover transition-shadow duration-500'
@@ -160,7 +168,8 @@ export default function Home() {
                   <Image
                     src={feature.image}
                     alt={feature.text}
-                    className='px-4 pt-4 bg-falcongray'
+                    className='px-4 pt-4 bg-falcongray cursor-zoom-in'
+                    onClick={() => handleFeatureClick(feature)}
                   />
                 </Card.Section>
                 <p className='text-center m-4 text-md md:text-lg '>
@@ -181,6 +190,22 @@ export default function Home() {
             </a>{' '}
             COPTER and PLANE devices are supported.
           </p>
+
+          <Modal
+            opened={modalOpened}
+            onClose={() => setModalOpened(false)}
+            size="80%"
+            overlayProps={{
+              backgroundOpacity: 0.55,
+              blur: 3,
+            }}
+            closeButtonProps={{ style: {color: tailwindColors.falconred[100]}}}
+          >
+            <Image src={selectedFeature?.image} alt="Selected feature"/>
+            <p className='text-center m-4 text-md md:text-lg '>
+              {selectedFeature?.text}
+            </p>
+          </Modal>
         </div>
 
         {contributors.length > 0 && (
