@@ -3,12 +3,12 @@
 import Header from '@/components/header'
 import tailwindConfig from '@/tailwind.config.js'
 import {
-  Modal,
   Avatar,
   Button,
   Card,
   Group,
   Image,
+  Modal,
   SimpleGrid,
   Tooltip,
 } from '@mantine/core'
@@ -50,13 +50,13 @@ const iconProps = {
 export default function Home() {
   const [contributors, setContributors] = useState([])
   const [repoStats, setRepoStats] = useState(null)
-  const [modalOpened, setModalOpened] = useState(false);
-  const [selectedFeature, setSelectedFeature] = useState(null);
+  const [modalOpened, setModalOpened] = useState(false)
+  const [selectedFeature, setSelectedFeature] = useState(null)
 
   const handleFeatureClick = (feature) => {
-    setSelectedFeature(feature);
-    setModalOpened(true);
-  };
+    setSelectedFeature(feature)
+    setModalOpened(true)
+  }
 
   useEffect(() => {
     async function getContributors() {
@@ -194,14 +194,16 @@ export default function Home() {
           <Modal
             opened={modalOpened}
             onClose={() => setModalOpened(false)}
-            size="80%"
+            size='80%'
             overlayProps={{
               backgroundOpacity: 0.55,
               blur: 3,
             }}
-            closeButtonProps={{ style: {color: tailwindColors.falconred[100]}}}
+            closeButtonProps={{
+              style: { color: tailwindColors.falconred[100] },
+            }}
           >
-            <Image src={selectedFeature?.image} alt="Selected feature"/>
+            <Image src={selectedFeature?.image} alt='Selected feature' />
             <p className='text-center m-4 text-md md:text-lg '>
               {selectedFeature?.text}
             </p>
