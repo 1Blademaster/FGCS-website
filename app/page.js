@@ -11,8 +11,10 @@ import {
   Modal,
   SimpleGrid,
   Tooltip,
+  Alert,
+  Badge
 } from '@mantine/core'
-import { IconBug, IconTool, IconUsers } from '@tabler/icons-react'
+import { IconBug, IconTool, IconUsers, IconInfoCircle} from '@tabler/icons-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import NextImage from 'next/image'
@@ -136,6 +138,19 @@ export default function Home() {
                 GitHub
               </Button>
             </Group>
+            <Badge 
+                size='lg' 
+                color={tailwindColors.falconred[80]}
+                variant="light"
+                styles={{
+                  root: {
+                    textTransform: 'none',
+                    color: 'white',
+                  },
+                }}
+              >
+                ✨ Introducing macOS support!
+            </Badge>
           </div>
           <div className='w-full md:w-7/12 lg:w-3/4'>
             <Image
