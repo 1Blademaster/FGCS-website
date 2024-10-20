@@ -3,9 +3,7 @@ import { Octokit } from 'octokit'
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
-export const config = {
-  runtime: 'edge',
-}
+export const runtime = 'edge'
 
 export default async function handler(req) {
   if (req.method !== 'POST') {
