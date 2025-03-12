@@ -162,7 +162,7 @@ export default function Home() {
               alt='A screenshot of the dashboard'
               radius='md'
               className='shadow-hero-image hover:shadow-hero-image-hover transition-shadow duration-500'
-            /> */}
+            /> */} 
             <video 
               autoPlay 
               loop 
