@@ -14,11 +14,14 @@ import {
   Alert,
   Badge
 } from '@mantine/core'
-import { IconBug, IconTool, IconUsers, IconInfoCircle} from '@tabler/icons-react'
+import { IconBug, IconTool, IconUsers } from '@tabler/icons-react'
+import Autoplay from 'embla-carousel-autoplay'
+import { Carousel } from '@mantine/carousel'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import NextImage from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import '@mantine/carousel/styles.css'
 import 'swiper/css'
 import resolveConfig from 'tailwindcss/resolveConfig'
 const tailwindColors = resolveConfig(tailwindConfig).theme.colors
@@ -28,19 +31,19 @@ dayjs.extend(relativeTime)
 const features = [
   {
     text: 'View real-time data plotted on graphs',
-    image: '/graphs_2.png',
+    image: '/graphs.png',
   },
   {
     text: 'Fetch and set all the parameters on your flight controller',
-    image: '/params.png',
+    image: '/params_2.png',
   },
   {
     text: 'Configure and test different aspects of your setup',
-    image: '/config_2.png',
+    image: '/config_3.png',
   },
   {
     text: 'View and analyse Dataflash and FGCS telemetry logs',
-    image: '/fla.png',
+    image: '/fla_2.png',
   },
 ]
 
@@ -54,6 +57,7 @@ export default function Home() {
   const [repoStats, setRepoStats] = useState(null)
   const [modalOpened, setModalOpened] = useState(false)
   const [selectedFeature, setSelectedFeature] = useState(null)
+  const autoplay = useRef(new Autoplay({ delay: 8000 }))
 
   const handleFeatureClick = (feature) => {
     setSelectedFeature(feature)
@@ -138,61 +142,78 @@ export default function Home() {
                 GitHub
               </Button>
             </Group>
-            <Badge 
-                size='lg' 
-                color={tailwindColors.falconred[80]}
-                variant="light"
-                styles={{
-                  root: {
-                    textTransform: 'none',
-                    color: 'white',
-                  },
-                }}
-              >
-                ✨ Introducing macOS support!
+            <Badge
+              size='lg'
+              color={tailwindColors.falconred[80]}
+              variant='light'
+              styles={{
+                root: {
+                  textTransform: 'none',
+                  color: 'white',
+                },
+              }}
+            >
+              ✨ Available on Windows and MacOS
             </Badge>
           </div>
           <div className='w-full md:w-7/12 lg:w-3/4'>
-            <Image
-              src='/dashboard_2.webp'
+            {/* <Image
+              src='/dashboard_3.webp'
               alt='A screenshot of the dashboard'
               radius='md'
               className='shadow-hero-image hover:shadow-hero-image-hover transition-shadow duration-500'
-            />
+            /> */}
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className='shadow-hero-image hover:shadow-hero-image-hover transition-shadow duration-500'
+            >
+              <source src='/dashboard.webm' type="video/webm" />
+              <source src='/dashboard.mp4' type="video/mp4" />
+            </video>
           </div>
         </div>
 
-        <div className='w-full'>
+        <div className='w-full md:w-9/12 lg:w-5/6'>
           <Header text='Features' icon={<IconTool {...iconProps} />} />
-          <SimpleGrid
-            cols={{ base: 1, sm: 2 }}
-            spacing={{ base: 'md', sm: 'xl' }}
-            verticalSpacing={{ base: 'md', sm: 'xl' }}
-            className='w-full lg:w-10/12 mx-auto'
-          >
-            {features.map((feature, index) => (
-              <Card
-                className='border border-gray-700 hover:border-gray-600 duration-500 transition-colors'
-                bg={tailwindColors.falcongray[100]}
-                key={index}
-                shadow='md'
-                padding='none'
-                radius='md'
-              >
-                <Card.Section>
-                  <Image
-                    src={feature.image}
-                    alt={feature.text}
-                    className='px-4 pt-4 bg-falcongray cursor-zoom-in'
-                    onClick={() => handleFeatureClick(feature)}
-                  />
-                </Card.Section>
-                <p className='text-center m-4 text-md md:text-lg '>
-                  {feature.text}
-                </p>
-              </Card>
-            ))}
-          </SimpleGrid>
+          <div className='relative group'>
+            <Carousel
+              withIndicators
+              slideGap='md'
+              loop
+              plugins={[autoplay.current]}
+              onMouseEnter={() => autoplay.current.stop}
+              onMouseLeave={() => autoplay.current.reset}
+              classNames={{
+                controls:
+                  'transition-opacity duration-150 opacity-0 group-hover:opacity-100',
+              }}
+            >
+              {features.map((feature, index) => (
+                <Carousel.Slide key={index}>
+                  <Card
+                    className='border border-gray-700 hover:border-gray-600 duration-500 transition-colors p-4'
+                    bg={tailwindColors.falcongray[90]}
+                    shadow='md'
+                    radius='md'
+                  >
+                    <Card.Section>
+                      <Image
+                        src={feature.image}
+                        alt={feature.text}
+                        className='px-4 pt-4 bg-falcongray-90'
+                      />
+                    </Card.Section>
+                    <p className='text-center m-4 text-md md:text-lg'>
+                      {feature.text}
+                    </p>
+                  </Card>
+                </Carousel.Slide>
+              ))}
+            </Carousel>
+          </div>
 
           <p className='text-center mt-6 text-gray-400'>
             Note: Currently only{' '}
@@ -205,24 +226,6 @@ export default function Home() {
             </a>{' '}
             COPTER and PLANE devices are supported.
           </p>
-
-          <Modal
-            opened={modalOpened}
-            onClose={() => setModalOpened(false)}
-            size='80%'
-            overlayProps={{
-              backgroundOpacity: 0.55,
-              blur: 3,
-            }}
-            closeButtonProps={{
-              style: { color: tailwindColors.falconred[100] },
-            }}
-          >
-            <Image src={selectedFeature?.image} alt='Selected feature' />
-            <p className='text-center m-4 text-md md:text-lg '>
-              {selectedFeature?.text}
-            </p>
-          </Modal>
         </div>
 
         {contributors.length > 0 && (

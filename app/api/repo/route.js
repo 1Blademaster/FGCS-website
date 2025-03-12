@@ -5,13 +5,6 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 
 export async function GET() {
   let cachedRepoStats = null
-  try {
-    cachedRepoStats = await kv.get('repoStats')
-  } catch (err) {
-    console.error(err)
-
-    return Response.json({ repoStats: null })
-  }
   let repoStats = null
 
   if (cachedRepoStats === null) {
@@ -35,8 +28,7 @@ export async function GET() {
         url: data.html_url,
       }
 
-      await kv.set('repoStats', repoStats)
-      console.log('Saved new repo stats data to KV')
+      // await kv.set('repoStats', repoStats)
     } else {
       console.error('Failed to fetch repo stats')
       console.error(fetchedStats)
